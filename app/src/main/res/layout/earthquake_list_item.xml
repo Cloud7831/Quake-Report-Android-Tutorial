@@ -14,21 +14,24 @@
 
                 <TextView
                     android:id="@+id/earthquake_magnitude"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingRight="16dp"
                     />
                 <TextView
                     android:id="@+id/earthquake_location"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingRight="16dp"
                     />
 
                 <TextView
                     android:id="@+id/earthquake_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     />
         </LinearLayout>
 </RelativeLayout>
