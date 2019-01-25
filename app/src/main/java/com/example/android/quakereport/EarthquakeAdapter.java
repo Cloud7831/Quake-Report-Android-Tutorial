@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
-    SimpleDateFormat fmt = new SimpleDateFormat("MMM dd, yyyy");
+    SimpleDateFormat dateFmt = new SimpleDateFormat("MMM dd, yyyy");
+    SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm a");
 
     public EarthquakeAdapter(Activity context, ArrayList<Earthquake> earthquakes){
         super(context, 0, earthquakes);
@@ -34,8 +35,11 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         TextView magTextView = (TextView) listItemView.findViewById(R.id.earthquake_magnitude);
         magTextView.setText(String.valueOf(currentEarthquake.getMag()));
 
+        TextView dateTextView = (TextView) listItemView.findViewById(R.id.earthquake_date);
+        dateTextView.setText(dateFmt.format(currentEarthquake.getTime()));
+
         TextView timeTextView = (TextView) listItemView.findViewById(R.id.earthquake_time);
-        timeTextView.setText(fmt.format(currentEarthquake.getTime()));
+        timeTextView.setText(timeFmt.format(currentEarthquake.getTime()));
 
         return listItemView;
     }
