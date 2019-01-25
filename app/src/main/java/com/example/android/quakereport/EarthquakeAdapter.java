@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     SimpleDateFormat dateFmt = new SimpleDateFormat("MMM dd, yyyy");
     SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm a");
+    DecimalFormat magFmt = new DecimalFormat("0.0");
 
     public EarthquakeAdapter(Activity context, ArrayList<Earthquake> earthquakes){
         super(context, 0, earthquakes);
@@ -29,11 +31,39 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         Earthquake currentEarthquake = getItem(position);
 
-        TextView locationTextView = (TextView) listItemView.findViewById(R.id.earthquake_location);
-        locationTextView.setText(currentEarthquake.getLocation());
+        // We want to show the location as two different strings.
+
+        String baseLocation = currentEarthquake.getLocation();
+        String locationPrefix;
+        String primaryLocation;
+
+        String scoutingWord = " of "; // The character sequence we're using to determine if something reads "##km NW of ..."
+        if(baseLocation.contains(scoutingWord)){
+            // String goes something like "##km NW of "
+            // Split the string after the " of ".
+
+            // Find where " of " occurs
+            int index = baseLocation.indexOf(scoutingWord);
+            int offset = scoutingWord.length();
+            locationPrefix = baseLocation.substring(0, index + offset);
+            primaryLocation = baseLocation.substring(index + offset, baseLocation.length()); // the rest of the string.
+        }
+        else{
+            // String does not contain something like "33km NW of ..."
+            locationPrefix = getContext().getString(R.string.location_prefix); // "Near the"
+            primaryLocation = baseLocation;
+        }
+
+
+        TextView locationTextView = (TextView) listItemView.findViewById(R.id.earthquake_location_primary);
+        locationTextView.setText(primaryLocation);
+
+        TextView locationPrefixTextView = (TextView) listItemView.findViewById(R.id.earthquake_location_prefix);
+        locationPrefixTextView.setText(locationPrefix);
+
 
         TextView magTextView = (TextView) listItemView.findViewById(R.id.earthquake_magnitude);
-        magTextView.setText(String.valueOf(currentEarthquake.getMag()));
+        magTextView.setText(String.valueOf(magFmt.format(currentEarthquake.getMag())));
 
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.earthquake_date);
         dateTextView.setText(dateFmt.format(currentEarthquake.getTime()));

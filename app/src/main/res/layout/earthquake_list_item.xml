@@ -17,15 +17,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingRight="16dp"
                     />
-                <TextView
-                    android:id="@+id/earthquake_location"
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingRight="16dp"
-                    />
+                    android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/earthquake_location_prefix"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                        <TextView
+                            android:id="@+id/earthquake_location_primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="0dp"
