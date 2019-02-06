@@ -1,13 +1,18 @@
 package com.example.android.quakereport;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -31,7 +36,10 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.earthquake_list_item, parent, false);
         }
 
-        Earthquake currentEarthquake = getItem(position);
+        final Earthquake currentEarthquake = getItem(position);
+
+
+        // Set the location data of the Earthquake -----------------------------------------------------------------------
 
         // We want to show the location as two different strings.
 
@@ -65,7 +73,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
 
 
-        // Set the Magnitude of the Earthquake and colour the circle
+        // Set the Magnitude of the Earthquake and colour the circle ------------------------------------------------------
 
         TextView magView = (TextView) listItemView.findViewById(R.id.earthquake_magnitude);
         magView.setText(String.valueOf(magFmt.format(currentEarthquake.getMag())));
@@ -74,6 +82,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         int magnitudeColour = getMagnitudeColour(currentEarthquake.getMag());
         magnitudeCircle.setColor(magnitudeColour);
 
+        // Set the date and time of the Earthquake ------------------------------------------------------------------------
 
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.earthquake_date);
         dateTextView.setText(dateFmt.format(currentEarthquake.getTime()));

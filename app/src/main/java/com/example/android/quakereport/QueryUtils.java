@@ -59,7 +59,7 @@ public final class QueryUtils {
                     JSONObject properties = ((JSONObject) features.get(i)).getJSONObject("properties");
 
                     Date date = new Date(properties.getLong("time"));
-                    earthquakes.add(new Earthquake(properties.getString("place"), date, properties.getDouble("mag")));
+                    earthquakes.add(new Earthquake(properties.getString("place"), date, properties.getDouble("mag"), properties.getString("url")));
                 }
                 else{
                     Log.d("QueryUtils", "Feature element was not a JSONObject as expected");
