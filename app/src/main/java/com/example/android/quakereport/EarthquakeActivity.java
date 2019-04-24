@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -57,6 +58,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         adapter.clear();
         emptyStateTextView.setText(R.string.no_earthquakes);
 
+        ProgressBar progressView = (ProgressBar) findViewById(R.id.loading_indicator);
+        progressView.setVisibility(View.GONE);
         if(earthquakes != null && !earthquakes.isEmpty()){
             adapter.addAll(earthquakes);
         }
