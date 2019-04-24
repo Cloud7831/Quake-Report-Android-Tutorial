@@ -16,33 +16,29 @@
 package com.example.android.quakereport;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Loader;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderCallbacks<List<Earthquake>> {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
-    private static final String USGS_QUERY_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+    private static final String USGS_QUERY_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=4&limit=10";
     private static final int EARTHQUAKE_LOADER_ID = 1;
     private TextView emptyStateTextView;
     private EarthquakeAdapter adapter;
@@ -56,10 +52,12 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes){
         // Clear the adapter of previous earthquake data
         adapter.clear();
+
+        // Set the empty state text in case there were no earthquakes.
         emptyStateTextView.setText(R.string.no_earthquakes);
 
-        ProgressBar progressView = (ProgressBar) findViewById(R.id.loading_indicator);
-        progressView.setVisibility(View.GONE);
+        hideProgressIndicator();
+
         if(earthquakes != null && !earthquakes.isEmpty()){
             adapter.addAll(earthquakes);
         }
@@ -105,8 +103,41 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
             }
         });
 
-        LoaderManager loaderManager = getLoaderManager();
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+            LoaderManager loaderManager = getLoaderManager();
 
-        loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        }
+        else {
+            hideProgressIndicator();
+
+            emptyStateTextView.setText(R.string.no_internet);
+
+        }
+    }
+
+    private void hideProgressIndicator(){
+        ProgressBar progressView = (ProgressBar) findViewById(R.id.loading_indicator);
+        progressView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.action_settings){
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
